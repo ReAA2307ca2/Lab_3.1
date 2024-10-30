@@ -6,17 +6,17 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfApp1
+namespace WpfApp1.Model
 {
-    public class Mushroom
+    public class Mushroom : INotifyPropertyChanged
     {
         public int id { get; set; }
         public string name { get; set; }
         public bool isEatable { get; set; }
-        public string colour;
-        public float weight;
-        public float height;
-        public float radius;    
+        public string colour { get; set; }
+        public float weight { get; set; }
+        public float height { get; set; }
+        public float radius { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
