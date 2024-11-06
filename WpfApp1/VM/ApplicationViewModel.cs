@@ -13,7 +13,7 @@ using WpfApp1.Model;
 
 namespace WpfApp1.VM
 {
-    internal class ButtonVM : Window, INotifyPropertyChanged
+    internal class ButtonVM : INotifyPropertyChanged
     {
         public ApplicationConnector db = new ApplicationConnector();
 
@@ -59,6 +59,7 @@ namespace WpfApp1.VM
             {
                 return mushroomDel ?? (mushroomDel = new RelayCommand(obj =>
                 {
+                    if (obj == null) return;
                     Mushroom mush = obj as Mushroom;
                     db.mushrooms.Remove(mush);
                     db.SaveChanges();
@@ -70,7 +71,6 @@ namespace WpfApp1.VM
         {
             db.Database.EnsureCreated();
             db.mushrooms.Load();
-            DataContext = db.mushrooms.Local.ToObservableCollection();
             mushrooms = db.mushrooms.Local.ToObservableCollection();
         }
     }
