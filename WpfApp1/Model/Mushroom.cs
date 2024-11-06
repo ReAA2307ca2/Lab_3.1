@@ -10,13 +10,13 @@ namespace WpfApp1.Model
 {
     public class Mushroom : INotifyPropertyChanged
     {
-        public int id { get; set; }
-        public string name { get; set; }
-        public bool isEatable { get; set; }
-        public string colour { get; set; }
-        public float weight { get; set; }
-        public float height { get; set; }
-        public float radius { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public bool IsEatable { get; set; }
+        public string Colour { get; set; }
+        public float Weight { get; set; }
+        public float Height { get; set; }
+        public float Radius { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
