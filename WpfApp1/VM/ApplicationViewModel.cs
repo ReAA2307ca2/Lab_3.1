@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -7,19 +8,22 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using WpfApp1.Data;
 using WpfApp1.Model;
 
 namespace WpfApp1.VM
 {
-    internal class ButtonVM : INotifyPropertyChanged
+    internal class ButtonVM : Window, INotifyPropertyChanged
     {
+        public ApplicationConnector db = new ApplicationConnector();
+
         public event PropertyChangedEventHandler PropertyChanged;
         public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
             if (PropertyChanged != null)
                 PropertyChanged(this, new PropertyChangedEventArgs(prop));
         }
-        public ObservableCollection<Mushroom> mushrooms { get; set; } = new ObservableCollection<Mushroom>();
+        public ObservableCollection<Mushroom> mushrooms { get; set; }
         private Mushroom selectedMush;
         public Mushroom SelectedMush
         {
@@ -30,7 +34,7 @@ namespace WpfApp1.VM
                 OnPropertyChanged("SelectedMush");
             }
         }
-        int maxID = 3;
+        int maxID = 1;
 
         private RelayCommand mushroomAdd;
         public RelayCommand MushroomAdd
@@ -39,8 +43,11 @@ namespace WpfApp1.VM
             {
                 return mushroomAdd ?? (mushroomAdd = new RelayCommand(obj =>
                 {
-                    var mushroom = new Mushroom() { id = maxID, name = "Name", isEatable = false, colour = "White", height = 12, radius = 6, weight = 93 };
-                    mushrooms.Add(mushroom);
+                    var mushroom = new Mushroom() {Name = "Name", IsEatable = false, Colour = "White", Height = 12, Radius = 6, Weight = 93 };
+                    
+                    db.mushrooms.Add(mushroom);
+                    db.SaveChanges();
+                    
                 }));
             }
         }
@@ -53,20 +60,18 @@ namespace WpfApp1.VM
                 return mushroomDel ?? (mushroomDel = new RelayCommand(obj =>
                 {
                     Mushroom mush = obj as Mushroom;
-                    mushrooms.Remove(mush);
-
+                    db.mushrooms.Remove(mush);
+                    db.SaveChanges();
                 }));
 
             }
         }
         public ButtonVM()
         {
-            mushrooms = new ObservableCollection<Mushroom>()
-            {
-                new Mushroom() {id= 1, name= "Gribovik", isEatable= false, weight = 60 },
-                new Mushroom() {id= 2, name= "Sedobnii grib", isEatable= true, radius = 4 },
-                new Mushroom() {id= 3, name= "Muchomor", isEatable= false, colour = "Black" }
-            };
+            db.Database.EnsureCreated();
+            db.mushrooms.Load();
+            DataContext = db.mushrooms.Local.ToObservableCollection();
+            mushrooms = db.mushrooms.Local.ToObservableCollection();
         }
     }
 }

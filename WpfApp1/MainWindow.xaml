@@ -27,7 +27,7 @@
         </Grid.RowDefinitions>
 
 
-        <ListView FontSize="14" Name="lw_listOfMush" ItemsSource="{Binding mushrooms}" Grid.Column="0" Grid.Row="5" Grid.RowSpan="5" Grid.ColumnSpan="4" SelectedItem="{Binding SelectedMush}" Margin="0,37,0,0">
+        <ListView FontSize="14" Name="lw_listOfMush" ItemsSource="{Binding db.mushrooms.Local.ToObservableCollection}" Grid.Column="0" Grid.Row="5" Grid.RowSpan="5" Grid.ColumnSpan="4" SelectedItem="{Binding SelectedMush}" Margin="0,37,0,0">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="ID" DisplayMemberBinding="{Binding id}"/>
