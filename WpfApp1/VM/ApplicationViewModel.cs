@@ -43,7 +43,7 @@ namespace WpfApp1.VM
             {
                 return mushroomAdd ?? (mushroomAdd = new RelayCommand(obj =>
                 {
-                    var mushroom = new Mushroom() {Name = "Name", IsEatable = false, Colour = "White", Height = 12, Radius = 6, Weight = 93 };
+                    var mushroom = new Mushroom() {Name = "Name", IsEatable = false, Colour = "White", Height = "12", Radius = "6", Weight = "93"};
                     
                     db.mushrooms.Add(mushroom);
                     db.SaveChanges();
@@ -63,6 +63,35 @@ namespace WpfApp1.VM
                     Mushroom mush = obj as Mushroom;
                     db.mushrooms.Remove(mush);
                     db.SaveChanges();
+                }));
+
+            }
+        }
+
+        private RelayCommand mushroomEdit;
+        public RelayCommand MushroomEdit
+        {
+            get
+            {
+                return mushroomEdit ?? (mushroomEdit = new RelayCommand(obj =>
+                {
+                    Mushroom? mush = obj as Mushroom;
+                    if (mush == null) return;
+                    Window1 editWindow = new Window1(mush);
+                    editWindow.ShowDialog();
+                    if (editWindow.DialogResult == true)
+                    {
+                        {
+                            mush.Name = editWindow.Mushroom.Name;
+                            mush.Colour = editWindow.Mushroom.Colour;
+                            mush.Radius = editWindow.Mushroom.Radius;
+                            mush.Weight = editWindow.Mushroom.Weight;
+                            mush.Height = editWindow.Mushroom.Height;
+                            mush.IsEatable = editWindow.Mushroom.IsEatable;
+                            db.Entry(mush).State = EntityState.Modified;
+                            db.SaveChanges();
+                        }
+                    }
                 }));
 
             }
